@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class A15 {
 
-    val exampleData = """1163751742
+    private val exampleData = """1163751742
 1381373672
 2136511328
 3694931569
@@ -17,18 +17,18 @@ class A15 {
 1293138521
 2311944581""".split('\n').map { it.toCharArray().map { it.toString().toInt() } }
 
-    data class Cavern(val size: Position, val positions: Map<Position, PositionInfo>) {
+    private data class Cavern(val size: Position, val positions: Map<Position, PositionInfo>) {
         val start get() = positions[Position(0, 0)]!!
         val score get() = start.score!! - start.risk
     }
 
-    data class Position(val x: Int, val y: Int) {
+    private data class Position(val x: Int, val y: Int) {
         override fun toString() = "($x,$y)"
         operator fun plus(other: Position) = Position(x + other.x, y + other.y)
         operator fun plus(direction: Direction) = Position(x + direction.offset.x, y + direction.offset.y)
     }
 
-    data class PositionInfo(
+    private data class PositionInfo(
         val position: Position,
         val risk: Int,
         val finish: Boolean,
@@ -48,7 +48,7 @@ class A15 {
             }
     }
 
-    enum class Direction(val offset: Position) {
+    private enum class Direction(val offset: Position) {
         Left(Position(-1, 0)),
         Right(Position(1, 0)),
         Up(Position(0, -1)),
