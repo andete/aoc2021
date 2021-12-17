@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class A15 {
+class Day15 {
 
     private val exampleData = """1163751742
 1381373672
@@ -98,19 +98,30 @@ class A15 {
     private fun calculate(cavern: Cavern, visitOrder: List<Position>) {
         for (p in visitOrder) {
             val positionInfo = cavern.positions[p]!!
-            positionInfo.lowest = positionInfo.neighbours.filterValues { it.score != null && it.lowestNeighbour != positionInfo }.map {
-                it.key to it.value
-            }.minByOrNull { it.second.score!! }!!.first
+            positionInfo.lowest =
+                positionInfo.neighbours.filterValues { it.score != null && it.lowestNeighbour != positionInfo }.map {
+                    it.key to it.value
+                }.minByOrNull { it.second.score!! }!!.first
         }
     }
 
     private fun incrementRow(data: List<Int>, by: Int): List<Int> {
         var res = data
         for (i in 0 until by) {
-            res =  res.map { (it % 9) + 1 }
+            res = res.map { (it % 9) + 1 }
         }
         return res
     }
+
+    private fun extendMap(data: List<List<Int>>) =
+        (0 until 5).flatMap { i ->
+            data.map {
+                (0 until 5).flatMap { j ->
+                    incrementRow(it, i + j)
+                }
+            }
+        }
+
 
     @Test
     fun example() {
@@ -133,14 +144,7 @@ class A15 {
 
     @Test
     fun examplePart2() {
-        val extendedMap = (0 until 5).flatMap { i ->
-            exampleData.map {
-                (0 until 5).flatMap { j ->
-                    incrementRow(it, i + j)
-                }
-            }
-        }
-        val cavern = makeCavern(extendedMap)
+        val cavern = makeCavern(extendMap(exampleData))
         val visitOrder = calculateVisitOrder(cavern)
         calculate(cavern, visitOrder)
         println(cavern.score)
@@ -149,16 +153,9 @@ class A15 {
 
     @Test
     fun part2() {
+        // highly inefficient, runs for almost 2 minutes
         val input = File("../input/input15.txt").readLines().map { it.toCharArray().map { it.toString().toInt() } }
-        val extendedMap = (0 until 5).flatMap { i ->
-            input.map {
-                (0 until 5).flatMap { j ->
-                    incrementRow(it, i + j)
-                }
-            }
-        }
-        println("starting...")
-        val cavern = makeCavern(extendedMap)
+        val cavern = makeCavern(extendMap(input))
         val visitOrder = calculateVisitOrder(cavern)
         calculate(cavern, visitOrder)
         println(cavern.score)
