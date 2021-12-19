@@ -135,7 +135,7 @@ private fun explode(number: SnailFishNumber): SnailFishNumber? {
         check(pairNumber.right is SimpleNumber)
         val l = lineairNumbers(number)
         var leftIndex = 0
-        // for some unknown reason indexOf doesn't work
+        // indexOf doesn't work because normal equality (==) gives false positives
         l.forEachIndexed { index, simpleNumber ->
             if (simpleNumber === pairNumber.left) {
                 leftIndex = index
