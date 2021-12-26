@@ -435,5 +435,6 @@ class Day23 {
         println(w.show())
         w = calculate(w)!!
         println(w.energy)
+        assertEquals(52055, w.energy)
     }
 }
